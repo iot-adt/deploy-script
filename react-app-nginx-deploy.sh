@@ -31,7 +31,7 @@ npm run build
 # 4. Nginx로 빌드 파일 배포
 echo "🚚 빌드 파일을 Nginx 웹 루트로 복사 중..."
 sudo rm -rf "$NGINX_WEB_ROOT"/*
-sudo cp -r build/* "$NGINX_WEB_ROOT"
+sudo cp -r dist/* "$NGINX_WEB_ROOT"
 
 # 5. Nginx 설정
 echo "🔧 Nginx 설정 파일 생성 중..."

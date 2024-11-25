@@ -41,20 +41,23 @@ server {
     listen 80;
     server_name _;
 
-    root $NGINX_WEB_ROOT;
+    root /var/www/html; # 빌드된 React 파일 위치
     index index.html;
 
     location / {
-        try_files \$uri /index.html;
+        # 요청된 파일이 없으면 index.html을 반환하여 React Router에 전달
+        try_files $uri /index.html;
     }
 
-    error_page 404 /index.html;
-
+    # 캐싱 규칙 설정 (정적 파일에 적용)
     location ~* \.(?:ico|css|js|gif|jpe?g|png|woff2?|eot|ttf|svg|otf)$ {
         expires 6M;
         access_log off;
         add_header Cache-Control "public";
     }
+
+    # 404 에러 처리
+    error_page 404 /index.html;
 }
 EOL
 

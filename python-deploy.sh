@@ -23,24 +23,21 @@ else
   echo "가상환경이 이미 존재합니다. 활성화 중..."
 fi
 source $VENV_DIR/bin/activate
-g
-# 3. pipreqs 설치 및 requirements.txt 생성
-echo "3. pipreqs 설치 및 requirements.txt 생성..."
-pip install --upgrade pip
-pip install pipreqs
-pipreqs $PROJECT_DIR --force
 
-# 4. requirements.txt 기반 라이브러리 설치
-if [ -f "$PROJECT_DIR/requirements.txt" ]; then
-  echo "4. requirements.txt 기반으로 라이브러리 설치..."
-  pip install -r $PROJECT_DIR/requirements.txt
+# 3. requirements.txt 생성 (필요한 경우)
+if [ ! -f "$PROJECT_DIR/requirements.txt" ]; then
+  echo "4. requirements.txt 생성 중..."
+  pipreqs $PROJECT_DIR --force
 else
-  echo "오류: requirements.txt가 생성되지 않았습니다."
-  exit 1
+  echo "requirements.txt가 이미 존재합니다."
 fi
 
-# 5. Python 스크립트 실행
-echo "5. Python 스크립트 실행..."
+# 5. requirements.txt 기반 라이브러리 설치
+echo "5. requirements.txt 기반으로 라이브러리 설치..."
+pip install -r $PROJECT_DIR/requirements.txt --exists-action i
+
+# 6. Python 스크립트 실행
+echo "6. Python 스크립트 실행..."
 if [ -f "$PROJECT_DIR/$SCRIPT_NAME" ]; then
   python3 $PROJECT_DIR/$SCRIPT_NAME
 else

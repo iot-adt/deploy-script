@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # 사용자 정의 설정
-GIT_REPO_URL=https://github.com/euijinkk/flask-test-server.git # Git 저장소 URL
-PROJECT_DIR=~/python-app                                       # 클론할 프로젝트 폴더
-SCRIPT_NAME=test.py                                            # 실행할 Python 스크립트 이름
+GIT_REPO_URL=https://github.com/iot-adt/rfid_module.git # Git 저장소 URL
+PROJECT_DIR=~/rfid_module                               # 클론할 프로젝트 폴더
+SCRIPT_NAME=rfid_module_enroll.py                       # 실행할 Python 스크립트 이름
 
 # 1. 프로젝트 디렉토리 확인 및 Git 클론
 if [ ! -d "$PROJECT_DIR" ]; then
@@ -24,20 +24,8 @@ else
 fi
 source $VENV_DIR/bin/activate
 
-# 3. requirements.txt 생성 (필요한 경우)
-if [ ! -f "$PROJECT_DIR/requirements.txt" ]; then
-  echo "4. requirements.txt 생성 중..."
-  pipreqs $PROJECT_DIR --force
-else
-  echo "requirements.txt가 이미 존재합니다."
-fi
-
-# 5. requirements.txt 기반 라이브러리 설치
-echo "5. requirements.txt 기반으로 라이브러리 설치..."
-pip install -r $PROJECT_DIR/requirements.txt --exists-action i
-
-# 6. Python 스크립트 실행
-echo "6. Python 스크립트 실행..."
+# 3. Python 스크립트 실행
+echo "3. Python 스크립트 실행..."
 if [ -f "$PROJECT_DIR/$SCRIPT_NAME" ]; then
   python3 $PROJECT_DIR/$SCRIPT_NAME
 else

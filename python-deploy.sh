@@ -24,7 +24,25 @@ else
 fi
 source $VENV_DIR/bin/activate
 
-# 3. Python 스크립트 실행
+# 3. Python 패키지 관리
+echo "2. Python 패키지를 관리합니다..."
+
+# requirements.txt가 없는 경우 생성
+if [ ! -f "$PROJECT_DIR/requirements.txt" ]; then
+    echo "requirements.txt 파일이 없습니다. 새로 생성합니다..."
+    cd $PROJECT_DIR
+    pip freeze > requirements.txt
+    echo "requirements.txt 생성 완료"
+fi
+
+# 4. 패키지 설치 (이미 설치된 패키지는 건너뜀)
+echo "필요한 Python 패키지를 설치합니다..."
+cd $PROJECT_DIR
+pip install -r requirements.txt --no-deps --quiet
+
+echo "Python 패키지 설치 완료"
+
+# 5. Python 스크립트 실행
 echo "3. Python 스크립트 실행..."
 if [ -f "$PROJECT_DIR/$SCRIPT_NAME" ]; then
   python3 $PROJECT_DIR/$SCRIPT_NAME

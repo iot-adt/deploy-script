@@ -38,22 +38,20 @@ echo "🔧 Nginx 설정 파일 생성 중..."
 NGINX_CONFIG="/etc/nginx/sites-available/$NGINX_SITE_NAME"
 sudo bash -c "cat > $NGINX_CONFIG" <<EOL
 server {
-    listen 80;
-    server_name _;
-
+    listen 80 default_server;
+    listen [::]:80 default_server;
+    
     root $NGINX_WEB_ROOT;
     index index.html;
 
+    server_name _;
+
     location / {
-        try_files $uri $uri/ /index.html;
+        try_files \$uri /index.html;
     }
 
-    error_page 404 /index.html;
-
-    location ~* \.(?:ico|css|js|gif|jpe?g|png|woff2?|eot|ttf|svg|otf)$ {
-        expires 6M;
-        access_log off;
-        add_header Cache-Control "public";
+    location /assets {
+        alias $NGINX_WEB_ROOT/assets;
     }
 }
 EOL

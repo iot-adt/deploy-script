@@ -27,13 +27,23 @@ source $VENV_DIR/bin/activate
 # 3. Python 패키지 관리
 echo "2. Python 패키지를 관리합니다..."
 
-# requirements.txt가 없는 경우 생성
-if [ ! -f "$PROJECT_DIR/requirements.txt" ]; then
-    echo "requirements.txt 파일이 없습니다. 새로 생성합니다..."
-    cd $PROJECT_DIR
-    pip freeze > requirements.txt
-    echo "requirements.txt 생성 완료"
+# pipreqs 설치 확인 및 설치
+if ! pip show pipreqs > /dev/null 2>&1; then
+    echo "pipreqs를 설치합니다..."
+    pip install pipreqs --quiet
 fi
+
+# requirements.txt 자동 생성
+echo "Python 파일을 분석하여 requirements.txt를 생성합니다..."
+cd $PROJECT_DIR
+# 기존 requirements.txt 백업 (있는 경우)
+if [ -f "requirements.txt" ]; then
+    mv requirements.txt requirements.txt.backup
+fi
+
+# pipreqs를 사용하여 필요한 패키지 분석 및 requirements.txt 생성
+pipreqs . --force --encoding=utf8
+echo "requirements.txt 생성 완료"
 
 # 4. 패키지 설치 (이미 설치된 패키지는 건너뜀)
 echo "필요한 Python 패키지를 설치합니다..."
